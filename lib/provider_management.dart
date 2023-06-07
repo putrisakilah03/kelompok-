@@ -2,18 +2,17 @@ import 'package:belajarprovider/provider_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProviderManagement extends StatelessWidget {    
-  ProviderCounter _providerCounter = ProviderCounter();
+class ProviderManagement extends StatelessWidget {
   ProviderManagement({super.key});
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
         print("1. Provider widget build");
         return ProviderCounter();
       },
-      child: Scaffold(
+      builder: (context, child) => Scaffold(
         appBar: AppBar(
           title: Text("Provider Management"),
         ),
@@ -24,23 +23,31 @@ class ProviderManagement extends StatelessWidget {
               const Text(
                 'You have pushed the button this many times:',
               ),
-              Consumer<ProviderCounter>(
+              /*Consumer<ProviderCounter>(
                 builder: (context, providerCounter, child) {
                   print("2. Consumer dijalankan");
                   return Text(
-                  '${providerCounter.counter}',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                    '${providerCounter.counter}',
+                    style: Theme.of(context).textTheme.headlineMedium,
                   );
                 },
+              ),*/
+              Text(
+                '${context.watch<ProviderCounter>().counter}',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
-              Consumer<ProviderCounter>(
-                builder: (context, providerCounter, child) => ElevatedButton(
+              ElevatedButton(
                   onPressed: () {
-                    providerCounter.increment();
-                  }, 
-                  child: Text("Tambah")
-                ),              
-              )
+                    context.read<ProviderCounter>().increment();
+                  },
+                  child: Text("Tambah")),
+              ElevatedButton(
+                  onPressed: () {
+                    Provider.of<ProviderCounter>(context, listen: false)
+                        .decrement();
+                    //context.read<ProviderCounter>().decrement();
+                  },
+                  child: Text("Kurang")),
             ],
           ),
         ),

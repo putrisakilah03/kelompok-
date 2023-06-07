@@ -4,8 +4,13 @@ class ProviderCounter with ChangeNotifier {
   int _counter = 4;
   int get counter => _counter;
 
-  void increment(){
+  void increment() {
     _counter++;
+    notifyListeners();
+  }
+
+  void decrement() {
+    _counter--;
     notifyListeners();
   }
 }
